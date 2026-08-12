@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+.DS_Store
+coverage/
+dist/
+
+# Generated patient documents (lab reports, etc.) — never commit PHI.
+uploads/
