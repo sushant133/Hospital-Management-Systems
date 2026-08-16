@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+.DS_Store
+coverage/
+dist/
+
+# Generated patient documents (lab reports, etc.) — never commit PHI.
+# The folder layout is tracked via .gitkeep; nothing written into it ever is.
+uploads/**
+!uploads/**/
+!uploads/**/.gitkeep

@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /**
+     * A very slightly cool ground rather than flat white. White cards need
+     * something to sit ON — against pure white they lose their edge entirely
+     * and the page reads as one undifferentiated sheet.
+     */
+    @apply bg-slate-100/70 text-slate-900 antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+  }
+
+  /**
+   * Numbers that sit in columns must line up.
+   *
+   * Applied globally to table cells and inputs rather than sprinkled per screen:
+   * a billing table where the rupee amounts jitter by a pixel per digit is
+   * genuinely harder to scan down, and every money and lab-value column in this
+   * system lives in a table.
+   */
+  td,
+  th,
+  input[type='number'],
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* One focus ring, everywhere. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white;
+  }
+
+  /**
+   * A thinner scrollbar for the panes that scroll internally — the sidebar nav,
+   * long worklists, modal bodies. The stock chrome bar eats real estate on a
+   * dense screen.
+   */
+  @supports (scrollbar-width: thin) {
+    .scroll-slim {
+      scrollbar-width: thin;
+      scrollbar-color: theme('colors.slate.300') transparent;
+    }
+  }
+  .scroll-slim::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scroll-slim::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300;
+  }
+  .scroll-slim::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+  .scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /**
+   * Respect a user who has asked for less motion. Ward staff on long shifts and
+   * anyone with vestibular sensitivity should not be made to sit through
+   * transitions all day.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .form-label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+
+  .form-control {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900
+           shadow-sm transition-colors
+           placeholder:text-slate-400
+           hover:border-slate-400
+           focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20
+           disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500;
+  }
+
+  .form-control-error {
+    @apply border-critical-400 focus:border-critical-500 focus:ring-critical-500/20;
+  }
+
+  /**
+   * The small uppercase label used for stat captions and definition terms.
+   * Extracted because it appeared inline on a dozen screens and had already
+   * drifted between `text-xs` and `text-[11px]`.
+   */
+  .eyebrow {
+    @apply text-2xs font-semibold uppercase tracking-wider text-slate-500;
+  }
+
+  /**
+   * A left stripe marking a row that needs attention.
+   *
+   * Severity encoded in FORM as well as colour, so it survives a bad monitor,
+   * a colour-blind reader, and a printed worklist — none of which are edge
+   * cases on a hospital ward.
+   */
+  .row-critical {
+    @apply border-l-2 border-critical-500 bg-critical-50/40;
+  }
+  .row-warning {
+    @apply border-l-2 border-warning-500 bg-warning-50/40;
+  }
+}
+
+@layer utilities {
+  /**
+   * Print. Hospitals print constantly — worklists, bills, discharge summaries —
+   * and the default output wastes ink on chrome nobody wants on paper.
+   */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    body {
+      @apply bg-white;
+    }
+  }
+}
